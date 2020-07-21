@@ -1,5 +1,5 @@
 # Personal Informations
-/config/mongoDB_account.py
+/config/accounts.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
