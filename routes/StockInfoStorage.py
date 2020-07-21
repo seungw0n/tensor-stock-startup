@@ -11,7 +11,7 @@ Created on Tue Jul 21 13:44:52 2020
 
 class StockInfoStorage:
 
-    def __init__(self, s_type, name, b_price, s_price, high_price, low_price, trading_volume, trading_value, closing_price, starting_price, inc_price, trading_trends):
+    def __init__(self, s_type, name, b_price, s_price, high_price, low_price, trading_volume, trading_value, closing_price, starting_price, inc_rate, trading_trends):
         self.__sType = s_type
         self.__name = name
         self.__bPrice = b_price
@@ -23,6 +23,7 @@ class StockInfoStorage:
         self.__closingPrice = closing_price
         self.__startingPrcie = starting_price
         self.__tradingTrends = trading_trends
+        self.__increasingRate = inc_rate
 
     '''
     def __init__(self, b_price, s_price, high_price, low_price, trading_volume, trading_value, closing_price, starting_price, inc_price, trading_trends):
@@ -45,7 +46,7 @@ class StockInfoStorage:
     
     def getName(self):
         return self.__name
-    def setType(self, n):
+    def setName(self, n):
         self.__name = n
     
     def getBuyingPrice(self):
@@ -92,6 +93,11 @@ class StockInfoStorage:
         return self.__tradingTrends
     def setTradingTrends(self, tt):
         self.__tradingTrends = tt
+        
+    def getIncreasingRate(self):
+        return self.__increasingRate
+    def setIncreasingRate(self, ir):
+        self.__increasingRate = ir
     
     # Codes above here are get/set functions
     
