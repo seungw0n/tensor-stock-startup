@@ -1,3 +1,6 @@
+# Personal Informations
+/config/MongoDB_account
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
