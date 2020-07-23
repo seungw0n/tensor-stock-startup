@@ -8,22 +8,31 @@ Created on Tue Jul 21 13:44:52 2020
 
 
 # Stock information storage _ Version 0.0.1
+from datetime import datetime as dt
+
 
 class StockInfoStorage:
 
-    def __init__(self, s_type, name, b_price, s_price, high_price, low_price, trading_volume, trading_value, closing_price, starting_price, inc_rate, trading_trends):
-        self.__sType = s_type
+    def __init__(self, name: str, code: str, marketType: str,
+                 buyingPrice: list, buyingVolume: list, sellingPrice: list, sellingVolume: list,
+                 highPrice: float, lowPrice: float, startingPrice: float, closingPrice: float, increasingRate: float,
+                 tradingVolume: float, tradingValue: float, tradingTrends: list, datetime: dt):
         self.__name = name
-        self.__bPrice = b_price
-        self.__sPrice = s_price
-        self.__highPrice = high_price
-        self.__lowPrice = low_price
-        self.__tradingVol = trading_volume
-        self.__tradingVal = trading_value
-        self.__closingPrice = closing_price
-        self.__startingPrcie = starting_price
-        self.__tradingTrends = trading_trends
-        self.__increasingRate = inc_rate
+        self.__code = code
+        self.__marketType = marketType
+        self.__buyingPrice = buyingPrice
+        self.__buyingVolume = buyingVolume
+        self.__sellingPrice = sellingPrice
+        self.__sellingVolume = sellingVolume
+        self.__highPrice = highPrice
+        self.__lowPrice = lowPrice
+        self.__startingPrice = startingPrice
+        self.__closingPrice = closingPrice
+        self.__increasingRate = increasingRate
+        self.__tradingVolume = tradingVolume
+        self.__tradingValue = tradingValue
+        self.__tradingTrends = tradingTrends
+        self.__datetime = datetime
 
     '''
     def __init__(self, b_price, s_price, high_price, low_price, trading_volume, trading_value, closing_price, starting_price, inc_price, trading_trends):
@@ -38,27 +47,41 @@ class StockInfoStorage:
         self.__tradingTrends = trading_trends
     '''
     # Codes below here are get/set functions
-
-    def getType(self):
-        return self.__sType
-    def setType(self, t):
-        self.__sType = t
-    
     def getName(self):
         return self.__name
     def setName(self, n):
         self.__name = n
-    
+
+    def getCode(self):
+        return self.__code
+    def setCode(self, c):
+        self.__code = c
+
+    def getMarketType(self):
+        return self.__marketType
+    def setMarketType(self, t):
+        self.__marketType = t
+
     def getBuyingPrice(self):
-        return self.__bPrice
+        return self.__buyingPrice
     def setBuyingPrice(self, bp):
-        self.__bPrice = bp
+        self.__buyingPrice = bp
+
+    def getBuyingVolume(self):
+        return self.__buyingVolume
+    def setBuyingVolume(self, bv):
+        self.__buyingVolume = bv
     
     def getSellingPrice(self):
-        return self.__sPrice
+        return self.__sellingPrice
     def setSellingPrice(self, sp):
-        self.__sPrice = sp
-    
+        self.__sellingPrice = sp
+
+    def getSellingVolume(self):
+        return self.__sellingVolume
+    def setSellingVolume(self, sv):
+        self.__sellingVolume = sv
+
     def getHighPrice(self):
         return self.__highPrice
     def setHighPrice(self, hp):
@@ -68,37 +91,41 @@ class StockInfoStorage:
         return self.__lowPrice
     def setLowPrice(self, lp):
         self.__lowPrice = lp
-    
-    def getTradingVolume(self):
-        return self.__tradingVol
-    def setTradingVolume(self, t_vol):
-        self.__tradingVol = t_vol
-    
-    def getTradingValue(self):
-        return self.__tradingVal
-    def setTradingValue(self, t_val):
-        self.__tradingVal = t_val
-    
+
+    def getStartingPrice(self):
+        return self.__startingPrice
+    def setStartingPrice(self, sp):
+        self.__startingPrice = sp
+
     def getClosingPrice(self):
         return self.__closingPrice
     def setClosingPrice(self, cp):
         self.__closingPrice = cp
-    
-    def getStartingPrice(self):
-        return self.__startingPrcie
-    def setStartingPrice(self, sp):
-        self.__startingPrice = sp
-    
-    def getTradingTrends(self):
-        return self.__tradingTrends
-    def setTradingTrends(self, tt):
-        self.__tradingTrends = tt
-        
+
     def getIncreasingRate(self):
         return self.__increasingRate
     def setIncreasingRate(self, ir):
         self.__increasingRate = ir
     
+    def getTradingVolume(self):
+        return self.__tradingVolume
+    def setTradingVolume(self, t_vol):
+        self.__tradingVolume = t_vol
+    
+    def getTradingValue(self):
+        return self.__tradingValue
+    def setTradingValue(self, t_val):
+        self.__tradingValue = t_val
+    
+    def getTradingTrends(self):
+        return self.__tradingTrends
+    def setTradingTrends(self, tt):
+        self.__tradingTrends = tt
+
+    def getDateTime(self):
+        return self.__datetime
+    def setDateTime(self, dt):
+        self.__datetime = dt
     # Codes above here are get/set functions
     
     '''
