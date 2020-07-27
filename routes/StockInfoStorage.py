@@ -78,9 +78,9 @@ class StockPastInfoStorage:
     def setTradingVolume(self, t_vol):
         self.__tradingVolume = t_vol
 
-    def getDateTime(self):
+    def getDatetime(self):
         return self.__datetime
-    def setDateTime(self, dt):
+    def setDatetime(self, dt):
         self.__datetime = dt
     # Codes above here are get/set functions
 
@@ -95,15 +95,15 @@ class StockCurrentInfoStorage:
         increasingRate: 전일비(%)      tradingVolume: 거래량      datetime: 날짜 (ex. 2019.01.01)
     """
     def __init__(self, code: str, marketType: str,
-                 buyingPrice: list, buyingVolume: list, sellingPrice: list, sellingVolume: list,
+                 buyingPrices: list, buyingVolumes: list, sellingPrices: list, sellingVolumes: list,
                  highPrice: float, lowPrice: float, startingPrice: float, closingPrice: float, increasingRate: float,
                  tradingVolume: float, tradingValue: float, tradingTrends: list, datetime: dt):
         self.__code = code
         self.__marketType = marketType
-        self.__buyingPrice = buyingPrice
-        self.__buyingVolume = buyingVolume
-        self.__sellingPrice = sellingPrice
-        self.__sellingVolume = sellingVolume
+        self.__buyingPrices = buyingPrices
+        self.__buyingVolumes = buyingVolumes
+        self.__sellingPrices = sellingPrices
+        self.__sellingVolumes = sellingVolumes
         self.__highPrice = highPrice
         self.__lowPrice = lowPrice
         self.__startingPrice = startingPrice
@@ -143,24 +143,24 @@ class StockCurrentInfoStorage:
         self.__marketType = t
 
     def getBuyingPrice(self):
-        return self.__buyingPrice
+        return self.__buyingPrices
     def setBuyingPrice(self, bp):
-        self.__buyingPrice = bp
+        self.__buyingPrices = bp
 
     def getBuyingVolume(self):
-        return self.__buyingVolume
+        return self.__buyingVolumes
     def setBuyingVolume(self, bv):
-        self.__buyingVolume = bv
+        self.__buyingVolumes = bv
 
     def getSellingPrice(self):
-        return self.__sellingPrice
+        return self.__sellingPrices
     def setSellingPrice(self, sp):
-        self.__sellingPrice = sp
+        self.__sellingPrices = sp
 
     def getSellingVolume(self):
-        return self.__sellingVolume
+        return self.__sellingVolumes
     def setSellingVolume(self, sv):
-        self.__sellingVolume = sv
+        self.__sellingVolumes = sv
 
     def getHighPrice(self):
         return self.__highPrice
@@ -202,8 +202,8 @@ class StockCurrentInfoStorage:
     def setTradingTrends(self, tt):
         self.__tradingTrends = tt
 
-    def getDateTime(self):
+    def getDatetime(self):
         return self.__datetime
-    def setDateTime(self, dt):
+    def setDatetime(self, dt):
         self.__datetime = dt
     # Codes above here are get/set functions
