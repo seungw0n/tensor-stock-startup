@@ -8,93 +8,139 @@ Created on Tue Jul 21 13:13:40 2020
 
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
+
 import importlib.util
-from StockInfoStorage import StockInfoStorage
+from .StockInfoStorage import StockCurrentInfoStorage
+from .StockInfoStorage import StockPastInfoStorage
 
-class MongoDB_Connection:
+"""
+operation types:
+    create
 
-    def __init__(self):
-        spec = importlib.util.spec_from_file_location("accounts", "../config/accounts.py")
-        accounts = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(accounts)
+ex) 
+obj = StockPastInfoStorage(....)
+connect(create, obj)
+or
+connect(delete_all)
+"""
 
-        self.__USERNAME = accounts.mongoAccount['username']
-        self.__PASSWORD = accounts.mongoAccount['password']
+def connect(self, operation: str, obj = None):
 
+    spec = importlib.util.spec_from_file_location("accounts", "../config/accounts.py")
+    accounts = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(accounts)
+    _username = accounts.mongoAccount['username']
+    _password = accounts.mongoAccount['password']
 
-    def connect(self, obj: StockInfoStorage = None):
+    # Connect to Cluster0-Tester
+    global client
+    global db
+    global collection
 
-        # Connect to Cluster0-Tester
-        global db
-        global collection
-
-        try:
-            self.client = MongoClient(host='mongodb+srv://' + self.__USERNAME + ':' + self.__PASSWORD + '@cluster0-tester.cwbjo.mongodb.net/<Cluster0-Tester>?retryWrites=true&w=majority',
-                                      maxPoolSize=100, socketTimeoutMS=1000, connectTimeoutMS=20000, serverSelectionTimeoutMS = 3000
-                                      )
-            print(self.client)
-        except ConnectionFailure:
-            print("Connection Error")
-
-
-
-        '''
-        # Create a database object referencing a new database, called "test"
-        db = client.test
-        '''
-
-
-        db = self.client["test"]
-        collection = db["test"]
-
-        """
-        if operation == "deleteAll":
-            deleteAll()
+    try:
+        client = MongoClient(host='mongodb+srv://' + self.__USERNAME + ':' + self.__PASSWORD + '@cluster0-tester.cwbjo.mongodb.net/<Cluster0-Tester>?retryWrites=true&w=majority',
+                                  maxPoolSize=100, socketTimeoutMS=20000, connectTimeoutMS=20000, serverSelectionTimeoutMS=20000)
+        print(self.client)
+    except ConnectionFailure:
+        print("Connection Error")
 
 
-        if obj is not None:
+    '''
+    # Create a database object referencing a new database, called "test"
+    db = client.test
+    '''
+    if obj is not None:
+        if isinstance(obj, StockPastInfoStorage):
+            db = client["Past"]
+            collection = db[obj.getCode()]
             if operation == "create":
-                create(obj)
-            else:
-                print("Invalid Operation, Try again - DB connection is automatically closed.")
-                client.close()
-            '''
-            elif operation == "read":
-                read(obj)
-            elif operation == "update":
-                update(obj)
-            elif operation == "delete":
-                delete(obj)
-            '''
-        """
-        #self.client.close()
-
-    def closeConnection(self):
-        self.client.close()
-        print("Connection closed")
+                create_past_info(obj)
 
 
-    # Need to be added trading_trends later.
-    def create(self, obj: StockInfoStorage):
-        tmp = {"name": obj.getName(), "code": obj.getCode(), "marketType": obj.getMarketType(),
-               "buyingPrice": obj.getBuyingPrice(), "buyingVolume": obj.getBuyingVolume(),
-               "sellingPrice": obj.getSellingPrice(), "sellingVolume": obj.getSellingVolume(),
-               "highPrice": obj.getHighPrice(), "lowPrice": obj.getLowPrice(),
-               "startingPrice": obj.getStartingPrice(), "closingPrice": obj.getClosingPrice(),
-               "increasingRate": obj.getIncreasingRate(), "tradingVolume": obj.getTradingVolume(),
-               "tradingValue": obj.getTradingValue(), "tradingTrends": obj.getTradingTrends()
-               }
-        result = collection.insert_one(tmp)
+        if isinstance(obj, StockCurrentInfoStorage):
+            db = client["Current"]
+            collection = db[obj.getCode()]
+            if operation == "create":
+                create_past_info(obj)
 
-        if result != "":
-            print("Success: " + str(result.inserted_id) + " - Create")
+
+
+
+    db = client["test"]
+    collection = db["test"]
+
+    """
+    if operation == "deleteAll":
+        deleteAll()
+
+
+    if obj is not None:
+        if operation == "create":
+            create(obj)
         else:
-            print("Failure - Create")
+            print("Invalid Operation, Try again - DB connection is automatically closed.")
+            client.close()
+        '''
+        elif operation == "read":
+            read(obj)
+        elif operation == "update":
+            update(obj)
+        elif operation == "delete":
+            delete(obj)
+        '''
+    """
 
-    def deleteAll(self):
-        x = collection.delete_many({})
-        print(x.deleted_count, " documents successfully deleted")
+def closeConnection(self):
+    client.close()
+    print("Connection closed")
 
 
+# Need to be added trading_trends later.
+def create_past_info(self, obj):
+    """
+            name: 주식 이름    (ex. SK하이닉스)
+            code: 주식 코드    (ex. 000660)
+            marketType: 증권 시장 종류 (ex. KOSPI)
+            highPrice: 고가      lowPrice: 저가       startingPrice: 시가     closingPrice: 종가
+            increasingRate: 전일비(%)      tradingVolume: 거래량      datetime: 날짜 (ex. 2019.01.01)
+        """
+    tmp = {"code": obj.getCode(), "marketType": obj.getMarketType(),
+           "highPrice": obj.getHighPrice(), "lowPrice": obj.getLowPrice(),
+           "startingPrice": obj.getStartingPrice(), "closingPrice": obj.getClosingPrice(),
+           "increasingRate": obj.getIncreasingRate(), "tradingVolume": obj.getTradingVolume(),
+           "datetime": obj.getDatetime()
+           }
 
+    result = collection.insert_one(tmp)
+
+    if result != "":
+        print("Success: " + str(result.inserted_id) + " - Create")
+    else:
+        print("Failure - Create")
+
+
+def create_cur_info(self, obj):
+    tmp = {"code": obj.getCode(), "marketType": obj.getMarketType(),
+           "buyingPrice": obj.getBuyingPrice(), "buyingVolume": obj.getBuyingVolume(),
+           "sellingPrice": obj.getSellingPrice(), "sellingVolume": obj.getSellingVolume(),
+           "highPrice": obj.getHighPrice(), "lowPrice": obj.getLowPrice(),
+           "startingPrice": obj.getStartingPrice(), "closingPrice": obj.getClosingPrice(),
+           "increasingRate": obj.getIncreasingRate(), "tradingVolume": obj.getTradingVolume(),
+           "tradingValue": obj.getTradingValue(), "tradingTrends": obj.getTradingTrends(),
+           "datetime": obj.getDatetime()
+           }
+    result = collection.insert_one(tmp)
+
+    if result != "":
+        print("Success: " + str(result.inserted_id) + " - Create")
+    else:
+        print("Failure - Create")
+
+
+"""
+def delete_all(self, col):
+    x = col.delete_many({})
+    print(x.deleted_count, " documents successfully deleted")
+
+"""
 
