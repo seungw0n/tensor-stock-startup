@@ -6,8 +6,7 @@ Created on Fri Jul 24 14:37:37 2020
 
 import time
 import requests
-'''from datetime import datetime'''
-
+import datetime
 from bs4 import BeautifulSoup
 
 
@@ -19,11 +18,11 @@ def controlPage(code, page):
     bs_obj = BeautifulSoup(result.content, "html.parser")
     return bs_obj
 
-'''def strToDate (str):
-    tmp = str.replace(".","-")
-    date = datetime.strptime(tmp, '%Y-%m-%d')
-    return date.date()
-'''
+def strToDate (str):
+    tmp = str.split(".") # 2019.01.01 --> tmp = {"2019", "01", "01"}
+    date = datetime.datetime(int(tmp[0]), int(tmp[1]), int(tmp[2]))
+    return date
+
 
 
 def byDayFirstHalf(bs_obj):
@@ -52,7 +51,9 @@ def byDayFirstHalf(bs_obj):
     That is why I made a seperate for loop to initialize the dates as keys 
     '''
     for i in range(0, 5):
+        # Changed
         dates.append(tds[i][0].text)
+        #dates.append(strToDate(tds[i][0].text))
 
     '''
     Initialize the keys
@@ -134,7 +135,9 @@ def byDaySecondHalf(bs_obj):
         That is why I made a seperate for loop to initialize the dates as keys 
         '''
         for i in range(0, 5):
+            # Changed
             dates.append(tds[i][0].text)
+            #dates.append(strToDate(tds[i][0].text))
 
         '''
         Initialize the keys
@@ -256,7 +259,10 @@ def lastPageFirstHalf(code):
     for i in range(0, 5):
 
         if tds[i][0].text != '\xa0':
-            dates.append(tds[i][0].text)
+            # changed
+            tmp = tds[i][0].text
+            # tmp = strToDate(tds[i][0].text)
+            dates.append(tmp)
 
     d1 = {key: [] for key in dates}
 
@@ -375,9 +381,11 @@ def fullInfo (code):
     return final
 
 
-startingTime = time.time()
-'''
-print(fullInfo("096530"))
-print("-----%d-----" % (time.time() - startingTime))
 
 '''
+startingTime = time.time()
+print(fullInfo("096530"))
+print("-----%d-----" % (time.time() - startingTime))
+'''
+
+
