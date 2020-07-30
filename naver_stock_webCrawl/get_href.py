@@ -131,30 +131,6 @@ def getKosdaqCode():
     for i in range(1, 30):
         obj = kospiAndDaq(1, i)
         result.append(getCode(obj))
-
-
-
     return result
 
 
-startingTime = time.time()
-'''
-print(len(getKospi()))
-print("---------------------------------------")
-
-print (len(getKospi()))
-print("---------------------------------------")
-
-print (getKosdaq())
-print(len(getKosdaq))
-print("---------------------------------------")
-
-print(getKospiCode())
-print(len(getKospiCode()))
-print("---------------------------------------")
-'''
-print(getKosdaqCode())
-
-print("---------------------------------------")
-
-print("-----%d-----" % (time.time() - startingTime))
