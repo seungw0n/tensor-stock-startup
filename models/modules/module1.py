@@ -3,14 +3,14 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import os
-
 from sklearn.preprocessing import MinMaxScaler
-from keras import Sequential, backend
-from keras.layers import LSTM, Dropout, Dense, Activation
-import datetime as dt
+
 
 def divisor():
     print('=' * 100)
+
+def window_sizes():
+    return [i for i in range(1, 91) if i % 5 == 0]
 
 def read_csv(directory_name,code):
     path = os.path.join(os.pardir, 'resources/records/day_records', directory_name, code + '.csv')
@@ -43,18 +43,31 @@ def pre_graph(df, x_axis: str, y_axis: str):
 def scale_columns():
     return ['STARTING_PRICE', 'HIGH_PRICE', 'LOW_PRICE', 'CLOSING_PRICE', 'TRADING_VOLUME']
 
-def get_scaled_data(df, scale_cols):
+def feature_cols():
+    return ['STARTING_PRICE', 'HIGH_PRICE', 'LOW_PRICE', 'TRADING_VOLUME']
+def label_cols():
+    return ['LOW_PRICE']
+
+def get_scaled_data(df):
     scaler = MinMaxScaler()
-    df_scaled = scaler.fit_transform(df[scale_cols])
+    df_scaled = scaler.fit_transform(df[scale_columns()])
+    df_scaled = pd.DataFrame(df_scaled)
+    df_scaled.columns = scale_columns()
     return df_scaled
 
+
+def make_dataset(data, label, window_size):
+    feature_list = []
+    label_list = []
+    for i in range(len(data) - window_size):
+        feature_list.append(np.array(data.iloc[i:i+window_size]))
+        label_list.append(np.array(label.iloc[i+window_size]))
+    return np.array(feature_list), np.array(label_list)
 
 """
 HOW TO USE THEM ?
 CODE EXAMPLE
 
-
-"""
 # EXAMPLE CODE
 raw_data = read_csv("COSMETIC", "002790")
 df_data = setup_date(raw_data)
@@ -67,3 +80,4 @@ df_scaled = pd.DataFrame(df_scaled)
 df_scaled.columns = scale_columns()
 print(df_scaled)
 # Above code is to test this function
+"""
