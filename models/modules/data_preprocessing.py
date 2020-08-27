@@ -16,31 +16,42 @@ def window_sizes():
     return [i for i in range(1, 91) if i % 5 == 0]
 
 def read_csv(directory_name,code):
-    path = os.path.join(os.pardir, 'resources/records/day_records', directory_name, code + '.csv')
+    p = os.path.join('..', os.pardir)
+    path = os.path.join(p, 'resources/records/day_records', directory_name, code + '.csv')
     #return pd.read_csv(path)
     return pd.read_csv(path,
                        names=['DATE','STARTING_PRICE','HIGH_PRICE','LOW_PRICE','CLOSING_PRICE','TRADING_VOLUME'],
                        encoding='euc-kr'
                        )
+
+def read_target_csv(directory_name, code):
+    p = os.path.join('..', os.pardir)
+    path = os.path.join(p, 'resources/records/target_records', directory_name, code + '.csv')
+
+    return pd.read_csv(path,
+                       names=['DATE','STARTING_PRICE','HIGH_PRICE','LOW_PRICE','CLOSING_PRICE','TRADING_VOLUME'],
+                       encoding='euc-kr'
+                       )
+
 def data_vectorization(raw_data):
-    del raw_data['DATE'] # delete DATE
+    del raw_data['DATE'] #delete DATE
     return raw_data.values[1:].astype(np.float)
 
-def data_reverse_order(raw_data):
-    return raw_data[::-1]
+def data_reverse_order(vectorized_data):
+    return vectorized_data[::-1]
 
 def min_max_scaling(x):
     xnp = np.asarray(x)
     return (xnp - xnp.min()) / (xnp.max() - xnp.min() + 1e-7)
 
-def data_normalization(raw_data):
+def data_normalization(vectorized_data):
     # 'STARTING_PRICE','HIGH_PRICE','LOW_PRICE','CLOSING_PRICE'
-    prices = raw_data[:, :-1]
+    prices = vectorized_data[:, :-1]
     scaled_prices = min_max_scaling(prices)
     #print("Normalized price: ", scaled_prices[0])
 
     # 'TRADING_VOLUME'
-    volumes = raw_data[:,-1:]
+    volumes = vectorized_data[:,-1:]
     scaled_volumes = min_max_scaling(volumes)
     #print("Normalized volume: ", scaled_volumes[0])
 
@@ -78,3 +89,4 @@ def divide_dataset(data_x, data_y, train_size, validation_size):
     test_y = np.array(data_y[train_size + validation_size: len(data_y)])
 
     return train_x, train_y, validation_x, validation_y, test_x, test_y
+
